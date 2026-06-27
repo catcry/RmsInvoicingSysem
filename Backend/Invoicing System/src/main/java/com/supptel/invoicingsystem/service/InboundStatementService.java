@@ -43,7 +43,6 @@ public class InboundStatementService {
     private final OutboundStatementService outboundStatementService;
     private final NotAvailableSequenceRepository notAvailableSequenceRepository;
     private final EntityManager entityManager;
-    private final OperatorRepository operatorRepository;
 
     public InboundStatementService(InboundStatementRepository inboundStatementRepository,
                                    InOutStatementService inOutStatementService,
@@ -56,7 +55,6 @@ public class InboundStatementService {
         this.outboundStatementService = outboundStatementService;
         this.notAvailableSequenceRepository = notAvailableSequenceRepository;
         this.entityManager = entityManager;
-        this.operatorRepository = operatorRepository;
     }
 
     public void addInboundStatement(Long outboundId, InboundStatementEntity entity) {
@@ -79,19 +77,6 @@ public class InboundStatementService {
             }
         } catch (Exception e) {
             logger.error("Exception at line 77: {}", e.getMessage());
-        }
-    }
-
-    public void updateCriteria(InOutStatementEntity inOutStatement, String excluded, String included) throws SettlementExceptionEntity {
-        try {
-            if (excluded.isEmpty() || included.isEmpty() ||
-                    inOutStatement.getInboundStatement() == null ||
-                    inOutStatement.getOutboundStatement() == null) {
-                return;
-            }
-            outboundStatementService.updateOutboundCriteria(inOutStatement.getOutboundStatement().getId(), excluded, included);
-        } catch (Exception e) {
-            logger.error("Exception at line 90: {}", e.getMessage());
         }
     }
 

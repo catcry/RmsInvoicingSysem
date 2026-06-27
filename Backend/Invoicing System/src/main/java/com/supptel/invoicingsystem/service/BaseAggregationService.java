@@ -58,7 +58,7 @@ public class BaseAggregationService {
             logger.error("Exception at line 59: {}", "outbound with this values does not exist");
             throw new SettlementExceptionEntity("outbound with this values does not exist", 404);
         }
-        OutboundStatementEntity outboundStatement = inOutStatements.get(0).getOutboundStatement();
+        OutboundStatementEntity outboundStatement = inOutStatements.getFirst().getOutboundStatement();
         return loadOutboundAggregationsByOutbound(outboundStatement, pageable);
     }
 

@@ -5,6 +5,7 @@ import com.supptel.invoicingsystem.repository.UserRepository;
 import com.supptel.invoicingsystem.service.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+	protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain chain)
 			throws ServletException, IOException {
 
 		final String requestTokenHeader = request.getHeader("Authorization");
