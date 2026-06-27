@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.supptel</groupId>
-    <artifactId>RmsInvoicingSysem</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>RmsInvoicingSysem</name>
-    <description>RmsInvoicingSysem</description>
+    <artifactId>RmsInvoicingSystem</artifactId>
+    <version>3.0.0</version>
+    <name>RmsInvoicingSystem</name>
+    <description>RMS Invoicing System</description>
     <url/>
     <licenses>
         <license/>

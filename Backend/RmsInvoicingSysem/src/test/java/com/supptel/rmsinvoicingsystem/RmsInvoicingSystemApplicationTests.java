@@ -1,10 +1,10 @@
-package com.supptel.rmsinvoicingsysem;
+package com.supptel.rmsinvoicingsystem;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class RmsInvoicingSysemApplicationTests {
+class RmsInvoicingSystemApplicationTests {
 
     @Test
     void contextLoads() {

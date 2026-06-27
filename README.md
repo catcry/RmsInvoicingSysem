@@ -1,3 +1,3 @@
-# RmsInvoicingSysem
+# RMS Invoicing System
 
-SupTel Invoicing System
+SuppTel Invoicing System
