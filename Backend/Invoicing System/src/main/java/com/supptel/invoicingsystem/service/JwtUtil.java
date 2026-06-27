@@ -32,7 +32,7 @@ public class JwtUtil {
     }
 
     public String getUsernameFromToken(String token) {
-        Claims claims = Jwts.parserBuilder()
+        Claims claims = Jwts.parser()
                 .setSigningKey(key)
                 .build().parseClaimsJws(token).getBody();
 
@@ -45,7 +45,7 @@ public class JwtUtil {
     }
 
     private boolean isTokenExpired(String token) {
-        Claims claims = Jwts.parserBuilder()
+        Claims claims = Jwts.parser()
                 .setSigningKey(key).build()
                 .parseClaimsJws(token)
                 .getBody();

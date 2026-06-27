@@ -57,6 +57,7 @@ public class SecurityConfig {
                         .requestMatchers("/stop").permitAll()
                         .requestMatchers("/", "/index.html", "/favicon.ico").permitAll()
                         .requestMatchers("/static/**", "/js/**", "/css/**", "/images/**").permitAll() // Ensure static paths are accessible
+                        .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll() // Ensure Swagger paths are accessible
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
