@@ -22,7 +22,8 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import { Grid2 } from "@mui/material";
 import StatementDetails from "../settlement/StatementDetails";
-import { isTokenExpired } from "./AuthService";
+import { logout } from "./AuthService";
+import { isAuthenticated } from "./KeycloakService";
 import { ThemeMode } from "./ThemeColorEnum";
 
 const NAVIGATION: Navigation = [
@@ -141,9 +142,8 @@ function ToolbarActionsLogout() {
   const navigate = useNavigate();
   const { mode, setMode } = useThemeContext();
 
-  const handleLogout = () => {
-    sessionStorage.setItem("jwt", "");
-    navigate("/login");
+  const handleLogout = async () => {
+    await logout();
   };
 
   const handleToggleMode = () => {
@@ -203,10 +203,20 @@ export default function DashboardLayoutNavigationActions(
       ? "/images/BonLogo_blue-dark.png"
       : "/images/BonLogo_blue-light.png";
   const navigate = useNavigate();
+  const [authed, setAuthed] = useState<boolean | null>(null);
 
-  if (isTokenExpired()) {
-    sessionStorage.removeItem("jwtToken");
-    navigate("/login");
+  useEffect(() => {
+    const checkAuth = async () => {
+      const result = await isAuthenticated();
+      setAuthed(result);
+      if (!result) {
+        navigate("/login");
+      }
+    };
+    checkAuth();
+  }, [navigate]);
+
+  if (authed === null || authed === false) {
     return null;
   }
 

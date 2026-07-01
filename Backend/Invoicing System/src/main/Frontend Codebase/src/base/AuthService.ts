@@ -1,36 +1,29 @@
-import api from './Api';
-import {jwtDecode, JwtPayload} from 'jwt-decode';
-
-// interface JwtPayload {
-//     exp: number;
-//     [key: string]: any;
-// }
-
+import {
+    handleLoginRedirect,
+    handleLoginCallback,
+    isAuthenticated as checkAuth,
+    logout as keycloakLogout,
+    getUser
+} from './KeycloakService';
 
 export const loginApi = async (username: string, password: string) => {
-    try {
-        const response = await api.post('/login', {username, password});
-        let token = response.data.token;
-        sessionStorage.setItem('jwtToken', token + '');
-        if (sessionStorage.getItem('jwtToken')) return token;
-        // return token;
-    } catch (error) {
-        console.error('Login failed:', error);
-        throw error;
-    }
+    // With Keycloak OIDC, login is handled via redirect, not direct API call.
+    // This function is kept for compatibility but redirects to Keycloak.
+    await handleLoginRedirect();
 };
 
-export const isTokenExpired = () => {
-    const token = sessionStorage.getItem('jwtToken');
-    if (!token) return true;
-    try {
-        const {exp} = jwtDecode<JwtPayload>(token);
-        if (!exp) return true;
-        return Date.now() >= exp * 1000;
-    } catch (e) {
-        return true;
-    }
+export const handleKeycloakCallback = async () => {
+    return await handleLoginCallback();
 };
-export const logout = () => {
-    sessionStorage.removeItem('jwtToken');
+
+export const isTokenExpired = async (): Promise<boolean> => {
+    return !(await checkAuth());
+};
+
+export const logout = async () => {
+    await keycloakLogout();
+};
+
+export const getCurrentUser = async () => {
+    return await getUser();
 };

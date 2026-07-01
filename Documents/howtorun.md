@@ -12,7 +12,12 @@ mvn clean
 mvn package
 ```
 
-and put builded jar file in your vm and run it with java:
+Run With HTTPS Protocol:
 ```
-java -jar InvoicingSystem.jar --spring.profiles.active=production
+nohup java -Djavax.net.ssl.trustStore=/home/settlement/SettlementProject/dev-truststore.p12 -Djavax.net.ssl.trustStorePassword=changeit -jar InvoicingSystem-3.0.0.jar --spring.profiles.active=development --server.port=8443 --server.ssl.key-store=/home/settlement/SettlementProject/keystore.p12 --server.ssl.key-store-password=13771210 --server.ssl.key-store-type=PKCS12 --server.ssl.key-alias=invoicing > app.log 2>&1 &
+```
+
+Remember to add Keycloak cert to java trusted certs:
+```
+sudo keytool -importcert -alias keycloak -file server.crt -cacerts
 ```

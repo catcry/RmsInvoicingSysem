@@ -28,7 +28,7 @@ public class InvoicingSystemApplication {
         Environment environment = event.getApplicationContext().getEnvironment();
 
         String port = environment.getProperty("local.server.port",
-                environment.getProperty("server.port", "8080"));
+                environment.getProperty("server.port", "8443"));
         String contextPath = environment.getProperty("server.servlet.context-path", "");
         if (!contextPath.isBlank() && !contextPath.startsWith("/")) {
             contextPath = "/" + contextPath;

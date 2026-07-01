@@ -1,14 +1,14 @@
 import axios from 'axios';
+import { getToken, logout } from './KeycloakService';
 
 const api = axios.create({
     baseURL: '/',
-//  Development
-//  baseURL: "localhost:8080/"
+    //baseURL: 'http://localhost:8080',
 });
 
 api.interceptors.request.use(
-    config => {
-        const token: string | null = sessionStorage.getItem('jwtToken');
+    async config => {
+        const token = await getToken();
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
@@ -18,16 +18,15 @@ api.interceptors.request.use(
         return Promise.reject(new Error('Something went wrong' + error.toString()));
     }
 );
+
 api.interceptors.response.use(
     response => response,
-    error => {
+    async error => {
         if (
-            !api.getUri().includes('/login') &&
             error.response &&
             error.response.status === 401
         ) {
-            sessionStorage.removeItem('jwtToken');
-            window.location.href = '/login'; // adjust to your login route
+            await logout();
         }
         return Promise.reject(new Error('Authentication Failed: ' + error.toString()));
     }

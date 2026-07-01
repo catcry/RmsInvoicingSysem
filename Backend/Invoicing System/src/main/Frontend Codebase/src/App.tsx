@@ -1,19 +1,37 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import { useThemeContext } from "./base/ThemeContext";
 import DashboardLayoutNavigationActions from "./base/DashboardLayoutNavigationActions";
 import { ThemeProvider } from "@mui/material/styles";
 import LoginPage from "./login/LoginPage";
 import { CssBaseline, GlobalStyles } from "@mui/material";
-import { isTokenExpired } from "./base/AuthService";
+import { CircularProgress, Box } from "@mui/material";
+import { isAuthenticated } from "./base/KeycloakService";
+
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [authed, setAuthed] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const check = async () => {
+      const result = await isAuthenticated();
+      setAuthed(result);
+    };
+    check();
+  }, []);
+
+  if (authed === null) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  return authed ? <>{children}</> : <Navigate to="/login" replace />;
+};
 
 const App: React.FC = () => {
   const { theme } = useThemeContext();
-
-  if (isTokenExpired()) {
-    sessionStorage.removeItem("jwtToken");
-  }
-
   const isDark = theme.palette.mode === "dark";
 
   return (
@@ -52,29 +70,33 @@ const App: React.FC = () => {
             <Route
               path="/settlement"
               element={
-                <DashboardLayoutNavigationActions initialUri={"dashboard"} />
+                <ProtectedRoute>
+                  <DashboardLayoutNavigationActions initialUri={"dashboard"} />
+                </ProtectedRoute>
               }
             />
             <Route
               path="/settlement-management"
               element={
-                <DashboardLayoutNavigationActions
-                  initialUri={"settlement-management"}
-                />
+                <ProtectedRoute>
+                  <DashboardLayoutNavigationActions initialUri={"settlement-management"} />
+                </ProtectedRoute>
               }
             />
             <Route
               path="/statement-details"
               element={
-                <DashboardLayoutNavigationActions
-                  initialUri={"statement-details"}
-                />
+                <ProtectedRoute>
+                  <DashboardLayoutNavigationActions initialUri={"statement-details"} />
+                </ProtectedRoute>
               }
             />
             <Route
               path="/dashboard"
               element={
-                <DashboardLayoutNavigationActions initialUri={"dashboard"} />
+                <ProtectedRoute>
+                  <DashboardLayoutNavigationActions initialUri={"dashboard"} />
+                </ProtectedRoute>
               }
             />
           </Routes>
